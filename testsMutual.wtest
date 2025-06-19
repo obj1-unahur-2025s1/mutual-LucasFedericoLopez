@@ -1,0 +1,80 @@
+import mutual.*
+
+describe "Tests Mutual" {
+const excursionCiudad1 = new ExcursionCiudad(cantAtracciones = 4)
+const excursionCiudad2 = new ExcursionCiudad(cantAtracciones = 8)
+const excursionTropical1 = new ExcursionCiudadTropical(cantAtracciones = 4)
+const excursionTropical2 = new ExcursionCiudadTropical(cantAtracciones = 8)
+const excursionTropical3 = new ExcursionCiudadTropical(cantAtracciones = 10)
+const trekking1 = new Trekking(kmSenderos = 100,diasSol = 130)
+const trekking2 = new Trekking(kmSenderos = 50,diasSol = 240)
+const trekking3 = new Trekking(kmSenderos = 250,diasSol = 130)
+  test "una excursión a ciudad normal (no tropical) en la que se visitan 4 atracciones, lleva 2 días, no implica esfuerzo, y no sirve para broncearse." {
+    assert.equals(2, excursionCiudad1.cantDias())
+    assert.notThat(excursionCiudad1.implicaEsfuerzo())
+    assert.notThat(excursionCiudad1.sirveBroncearse())
+  }
+  test "una excursión a ciudad tropical en la que se visitan 4 atracciones, lleva 3 días, no implica esfuerzo, y sí sirve para broncearse." {
+    assert.equals(3, excursionTropical1.cantDias())
+    assert.notThat(excursionTropical1.implicaEsfuerzo())
+    assert.that(excursionTropical1.sirveBroncearse())
+  }
+  test "una excursión a ciudad normal (no tropical) en la que se visitan 8 atracciones, lleva 4 días, implica esfuerzo, y no sirve para broncearse." {
+    assert.equals(4, excursionCiudad2.cantDias())
+    assert.that(excursionCiudad2.implicaEsfuerzo())
+    assert.notThat(excursionCiudad2.sirveBroncearse())
+  }
+  test "una excursión a ciudad tropical en la que se visitan 8 atracciones, lleva 5 días, implica esfuerzo, y sirve para broncearse." {
+    assert.equals(5, excursionTropical2.cantDias())
+    assert.that(excursionTropical2.implicaEsfuerzo())
+    assert.that(excursionTropical2.sirveBroncearse())
+  }
+  test "una excursión a ciudad tropical en la que se visitan 10 atracciones, lleva 6 días, no implica esfuerzo, y sí sirve para broncearse." {
+    assert.equals(6, excursionTropical3.cantDias())
+    assert.notThat(excursionTropical3.implicaEsfuerzo())
+    assert.that(excursionTropical3.sirveBroncearse())
+  }
+  test "una salida de 100 kilómetros a un lugar con 130 días de sol por año: lleva 2 días, implica esfuerzo, y no sirve para broncearse." {
+    assert.equals(2, trekking1.cantDias())
+    assert.that(trekking1.implicaEsfuerzo())
+    assert.notThat(trekking1.sirveBroncearse())
+  }
+  test "una salida de 50 kilómetros a un lugar con 240 días de sol por año: lleva 1 día, no implica esfuerzo, y sí sirve para broncearse." {
+    assert.equals(1, trekking2.cantDias())
+    assert.notThat(trekking2.implicaEsfuerzo())
+    assert.that(trekking2.sirveBroncearse())
+  }
+  test "una salida de 250 kilómetros a un lugar con 130 días de sol por año: lleva 5 días, implica esfuerzo, y sirve para broncearse." {
+    assert.equals(5, trekking3.cantDias())
+    assert.that(trekking3.implicaEsfuerzo())
+    assert.that(trekking3.sirveBroncearse())
+  }
+}
+
+describe "Tests Mutual 2" {
+  const roque = new Socio(cantMaximaActividades = 2)
+  const ana = new Socio(cantMaximaActividades = 3)
+  const viajePlaya1 = new ViajePlaya(largo = 1000)
+  const viajePlaya2 = new ViajePlaya(largo = 2000)
+  const gimnasia1 = new ClasesGimnasia()
+  method initialize() {
+    roque.registrarActividad(viajePlaya1)
+    roque.registrarActividad(viajePlaya2)
+    //roque.registrarActividad(gimnasia1)
+    ana.registrarActividad(viajePlaya1)
+    ana.registrarActividad(viajePlaya2)
+    ana.registrarActividad(gimnasia1)
+  }
+  test "roque es adorador del sol" {
+    assert.that(roque.esAdoradorDelSol())
+  }
+  test "la unica actividad forzada de roque es el viajePlaya2" {
+    assert.equals([viajePlaya2], roque.actividadesEsforzadas())
+  }
+  test "ana no es adorador del sol" {
+    assert.notThat(ana.esAdoradorDelSol())
+  }
+  test "las actividades forzadas de ana son el viajePlaya2 y gimnasia1" {
+    assert.equals([viajePlaya2,gimnasia1], ana.actividadesEsforzadas())
+  }
+}
